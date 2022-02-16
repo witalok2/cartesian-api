@@ -2,8 +2,8 @@
     "type": "postgres",
     "host": "localhost",
     "port": 5432,
-    "user": "admin",
-    "password": "123",
+    "user": "postgres",
+    "password": "postgres",
     "name": "coordinate",
     "ssl_mode": "disable",
     "max_open_connections": 0
