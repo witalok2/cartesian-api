@@ -1,28 +1,16 @@
 package point
 
 import (
+	"encoding/json"
+	"io/ioutil"
+	"log"
 	"math"
+	"os"
 	"sort"
-
-	"github.com/cartesian-api/config"
-	"github.com/cartesian-api/utils/database"
 )
 
-func CreateMultipleCoordinate(coordinate []Coordinate) error {
-	db := database.MustGetByFile(config.POSTGRES_FILE)
-
-	err := createMultipleCoordinateDB(coordinate, db)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
 func FindByCoordinate(params ParamCoordinate) (coordinateDistance []CoordinateDistance, err error) {
-	db := database.MustGetByFile(config.POSTGRES_FILE)
-
-	coordinates, err := findByCoordinateDB(db)
+	coordinates, err := LoadFilePoint()
 	if err != nil {
 		return
 	}
@@ -69,4 +57,28 @@ func manhattanDistance(x, y []int) int {
 	}
 
 	return distance
+}
+
+func LoadFilePoint() (coordinate []Coordinate, err error) {
+	jsonFile, err := os.Open("point.json")
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+
+	defer jsonFile.Close()
+
+	byteValueJSON, err := ioutil.ReadAll(jsonFile)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+
+	err = json.Unmarshal(byteValueJSON, &coordinate)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+
+	return coordinate, nil
 }
