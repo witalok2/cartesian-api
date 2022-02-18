@@ -8,5 +8,5 @@ import (
 func AddRoutes(e *echo.Echo) {
 	auth := e.Group("api/v1/")
 
-	auth.GET("points", FindByFilterHandler, handler.MiddlewareBindAndValidate(&ParamCoordinate{}))
+	auth.GET("points", FindByCoordinateHandler, handler.MiddlewareBindAndValidate(&ParamCoordinate{}))
 }
